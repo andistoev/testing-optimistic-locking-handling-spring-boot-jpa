@@ -1,6 +1,6 @@
 package com.andistoev.optlockingservice;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ItemRepository extends JpaRepository<Item, String> {
+public interface ItemRepository extends CrudRepository<Item, String> {
 }

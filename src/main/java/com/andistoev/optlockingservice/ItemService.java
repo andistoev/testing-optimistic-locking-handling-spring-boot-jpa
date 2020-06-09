@@ -13,7 +13,7 @@ public class ItemService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void incrementAmount(String id, int amount) {
-        Item item = itemRepository.getOne(id);
+        Item item = itemRepository.findById(id).get();
         item.setAmount(item.getAmount() + amount);
     }
 
