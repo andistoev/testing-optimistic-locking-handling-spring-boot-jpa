@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @RequiredArgsConstructor
 @Service
 public class ItemService {
@@ -13,7 +15,7 @@ public class ItemService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void incrementAmount(String id, int amount) {
-        Item item = itemRepository.findById(id).get();
+        Item item = itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         item.setAmount(item.getAmount() + amount);
     }
 
