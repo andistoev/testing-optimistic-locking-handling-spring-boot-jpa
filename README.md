@@ -1,4 +1,7 @@
-# testing-optimistic-locking-handling-spring-boot-jpa
-This is an example of how you can test optimistic locking handling with Spring Boot and JPA.
+# Source Code For Blog Post "Testing Optimistic Locking Handling with Spring Boot and JPA"
 
-The [blog post](https://blog.mimacom.com/testing-optimistic-locking-handling-spring-boot-jpa/) explains in details the source code in this project.
+This SpringBoot maven project is part of [blog post](https://blog.mimacom.com/testing-optimistic-locking-handling-spring-boot-jpa/) where you could find not only explanation for it, but also theoretical background for:
+- What does optimistic locking handling mean;
+- How you could implement it within a Spring Boot Application and JPA;
+- How you could write integration tests for handling optimistic locking.
+
