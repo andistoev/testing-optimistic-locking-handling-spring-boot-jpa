@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +39,7 @@ class InventoryServiceTest {
         assertEquals(0, srcItem.getVersion());
 
         // when
-        for(final int amount: itemAmounts) {
+        for (final int amount : itemAmounts) {
             inventoryService.incrementProductAmount(srcItem.getId(), amount);
         }
 
@@ -58,18 +60,14 @@ class InventoryServiceTest {
         assertEquals(0, srcItem.getVersion());
 
         // when
-        List<Thread> threads = new ArrayList<>();
+        final ExecutorService executor = Executors.newFixedThreadPool(itemAmounts.size());
 
         for (final int amount : itemAmounts) {
-            Runnable task = () -> inventoryService.incrementProductAmount(srcItem.getId(), amount);
-            Thread thread = new Thread(task);
-            thread.start();
-            threads.add(thread);
+            executor.execute(() -> inventoryService.incrementProductAmount(srcItem.getId(), amount));
         }
 
-        for (Thread thread : threads) {
-            thread.join();
-        }
+        executor.shutdown();
+        executor.awaitTermination(1, TimeUnit.MINUTES);
 
         // then
         final Item item = itemRepository.findById(srcItem.getId()).get();
