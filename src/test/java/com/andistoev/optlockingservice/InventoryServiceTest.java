@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -44,7 +45,7 @@ class InventoryServiceTest {
         }
 
         // then
-        final Item item = itemRepository.findById(srcItem.getId()).get();
+        final Item item = itemRepository.findById(srcItem.getId()).orElseThrow(() -> new IllegalArgumentException("No item found!"));
 
         assertAll(
                 () -> assertEquals(2, item.getVersion()),
@@ -67,10 +68,10 @@ class InventoryServiceTest {
         }
 
         executor.shutdown();
-        executor.awaitTermination(1, TimeUnit.MINUTES);
+        assertTrue(executor.awaitTermination(1, TimeUnit.MINUTES));
 
         // then
-        final Item item = itemRepository.findById(srcItem.getId()).get();
+        final Item item = itemRepository.findById(srcItem.getId()).orElseThrow(() -> new IllegalArgumentException("No item found!"));
 
         assertAll(
                 () -> assertEquals(2, item.getVersion()),
